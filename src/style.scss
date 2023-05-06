@@ -1,10 +1,16 @@
-.available.has--event::after {
-    position: absolute;
-    content: "";
-    height: 2px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transform: translateY(-50%);
-    background: #f60;
+.available.has--event {
+    background: rgb(4, 0, 255);
+    color: #fff;
+    font-weight: bold;
 }
+
+// .available.has--event::after {
+//     position: absolute;
+//     content: "";
+//     height: 2px;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     transform: translateY(-50%);
+//     background: #f60;
+// }

@@ -18,7 +18,11 @@
         :class="{ current: isWeekActive(row[1]) }"
         :key="key"
       >
-        <td v-for="(cell, key) in row" :class="getCellClasses(cell)" :key="key">
+        <td
+          v-for="(cell, key) in row"
+          :key="key"
+          :class="[getCellClasses(cell), hasEvent(cell)]"
+        >
           <div>
             <span>
               {{ cell.text }}
@@ -40,6 +44,7 @@ import {
   nextDate,
   isDate,
   clearTime as _clearTime,
+  formatDate,
 } from "element-ui/src/utils/date-util";
 import Locale from "element-ui/src/mixins/locale";
 import {
@@ -72,6 +77,13 @@ export default {
   mixins: [Locale],
 
   props: {
+    eventDates: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+
     firstDayOfWeek: {
       default: 7,
       type: Number,
@@ -172,6 +184,8 @@ export default {
           : [];
       const now = getDateTimestamp(new Date());
 
+      // debugger;
+
       for (let i = 0; i < 6; i++) {
         const row = rows[i];
 
@@ -212,6 +226,8 @@ export default {
             cell.type = "today";
           }
 
+          debugger;
+
           if (i >= 0 && i <= 1) {
             const numberOfDaysFromPreviousMonth =
               day + offset < 0 ? 7 + day + offset : day + offset;
@@ -236,6 +252,9 @@ export default {
           }
 
           let cellDate = new Date(time);
+
+          cell.__date__ = formatDate(cellDate);
+
           cell.disabled =
             typeof disabledDate === "function" && disabledDate(cellDate);
           cell.selected = arrayFind(
@@ -254,6 +273,14 @@ export default {
   },
 
   watch: {
+    eventDates: {
+      // eslint-disable-next-line no-unused-vars
+      handler(newVal, oldVal) {
+        console.log(newVal);
+      },
+      immediate: true,
+    },
+
     minDate(newVal, oldVal) {
       if (getDateTimestamp(newVal) !== getDateTimestamp(oldVal)) {
         this.markRange(this.minDate, this.maxDate);
@@ -276,6 +303,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 判断当天是否有任务
+     * @return {String} 事件类名
+     */
+    hasEvent(cell) {
+      let eventClass = "";
+      if (this.eventDates.includes(cell.__date__)) {
+        eventClass = "has--event";
+      }
+      // console.log(`log cell ;`);
+      // console.log(eventClass, cell.__date__);
+      return eventClass;
+    },
+
     cellMatchesDate(cell, date) {
       const value = new Date(date);
       return (
@@ -292,6 +333,8 @@ export default {
           ? this.defaultValue
           : [this.defaultValue]
         : [];
+
+      // debugger;
 
       let classes = [];
       if ((cell.type === "normal" || cell.type === "today") && !cell.disabled) {

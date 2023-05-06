@@ -1,8 +1,15 @@
 <template>
   <div id="app">
+    <div class="page-header">
+      <el-button type="primary" @click="pushDate">产生新的日期</el-button>
+    </div>
     <div class="date-list">
       <div class="date-item" v-for="(date, $index) in dateList" :key="$index">
-        <pyzl-date-table :date="new Date(date)"></pyzl-date-table>
+        <pyzl-date-table
+          :date="new Date(date)"
+          :event-dates="eventDates"
+          :key="renderKey"
+        ></pyzl-date-table>
       </div>
     </div>
   </div>
@@ -33,7 +40,48 @@ export default {
         "2023-11-01",
         "2023-12-01",
       ],
+
+      eventDates: ["2023-05-10"],
+
+      renderKey: Date.now(),
+
+      count: 0,
     };
+  },
+
+  methods: {
+    refreshRenderKey() {
+      console.log("refresh render key:");
+      this.renderKey = Date.now();
+    },
+
+    pushDate() {
+      if (this.count === 0) {
+        this.count++;
+        this.eventDates = this.eventDates.concat([
+          "2023-04-01",
+          "2023-01-01",
+          "2023-01-02",
+        ]);
+        return;
+      }
+      if (this.count === 1) {
+        this.count++;
+        this.eventDates = this.eventDates.concat(["2023-08-01", "2023-09-15"]);
+        return;
+      }
+      if (this.count === 2) {
+        this.count++;
+        this.eventDates = this.eventDates.concat(["2023-06-01", "2023-07-13"]);
+        return;
+      }
+      if (this.count === 3) {
+        this.count = 0;
+        this.eventDates = [];
+        return;
+      }
+      // this.refreshRenderKey();
+    },
   },
 };
 </script>
