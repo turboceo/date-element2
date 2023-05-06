@@ -2,19 +2,19 @@
   <div id="app">
     <div class="date-list">
       <div class="date-item" v-for="(date, $index) in dateList" :key="$index">
-        <date-table :date="new Date(date)"></date-table>
+        <pyzl-date-table :date="new Date(date)"></pyzl-date-table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import DateTable from "element-ui/packages/date-picker/src/basic/date-table.vue";
+import PyzlDateTable from "./components/PyzlDateTable.vue";
 
 export default {
   name: "App",
   components: {
-    DateTable,
+    PyzlDateTable,
   },
 
   data() {
